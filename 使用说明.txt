@@ -1,0 +1,29 @@
+=====================================
+  Simple AI Drawing - 快速使用说明
+=====================================
+
+【一句话教程】
+
+将整个 `simple-ai-drawing` 文件夹放到海豹的 `scripts` 目录，配置好插件，然后双击 `启动图生图服务(Windows).bat` 即可开始使用。
+
+【详细步骤】
+
+1. 安装插件
+   将整个 `simple-ai-drawing` 文件夹复制到海豹的 `scripts` 目录。
+
+2. 配置插件（在海豹Web界面）
+   - apiKey: 你的Gemini API Key
+   - backendUrl: http://localhost:5000/process-image （图生图必需）
+
+3. 启动后端（仅图生图需要）
+   双击 `simple-ai-drawing` 文件夹内的 "启动图生图服务(Windows).bat"。
+
+4. 使用
+   - 文生图: .ai 画一只猫
+   - 图生图: [粘贴图片] .ai 改成油画风格
+
+
+【更多信息】
+
+- 详细功能说明和配置指南，请查看 README.md
+- Windows环境的详细测试步骤，请查看 docs/WINDOWS_测试指南.md
