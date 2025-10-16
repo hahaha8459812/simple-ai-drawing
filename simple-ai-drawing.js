@@ -126,13 +126,13 @@ if (!seal.ext.find('simple-ai-drawing')) {
   // 创建扩展
   const ext = seal.ext.new('simple-ai-drawing', '罗德岛家岁片', '3.0.0');
 
-  // 创建指令
-  const cmdAi = seal.ext.newCmdItemInfo();
-  cmdAi.name = 'ai';
-  cmdAi.help = '使用AI模型画图。\n\n【文生图】\n用法: .ai <画图提示词>\n示例: .ai 画一只可爱的猫咪\n\n【图生图】\n用法: 在同一条消息中发送图片和指令\n示例: [图片] .ai 将这张图改成油画风格\n\n【预制提示词】\n用法: .ai <关键词>\n示例: .ai 手办化\n\n⚠️ 注意：\n- 图生图功能需要配置后端服务\n- 预制提示词可在WebUI中配置';
+  // 创建主指令
+  const cmdDraw = seal.ext.newCmdItemInfo();
+  cmdDraw.name = '生图';
+  cmdDraw.help = '使用AI模型画图。\n\n【文生图】\n用法: .生图 <画图提示词>\n示例: .生图 画一只可爱的猫咪\n\n【图生图】\n用法: 在同一条消息中发送图片和指令\n示例: [图片] .生图 将这张图改成油画风格\n\n【预制提示词】\n用法: .生图 <关键词>\n示例: .生图 手办化\n\n使用 .生图预设 查看所有可用关键词。\n\n⚠️ 注意：\n- 图生图功能需要配置后端服务\n- 预制提示词可在WebUI中配置';
 
   // 指令核心函数
-  cmdAi.solve = async (ctx, msg, cmdArgs) => {
+  cmdDraw.solve = async (ctx, msg, cmdArgs) => {
     // 获取原始消息内容（包含图片CQ码）
     const fullMessage = msg.message;
     const userInput = cmdArgs.rawArgs.trim();
@@ -146,8 +146,8 @@ if (!seal.ext.find('simple-ai-drawing')) {
     if (userInput) {
       textPrompt = removeImageCQ(userInput);
     } else {
-      // 移除指令本身（.ai）
-      textPrompt = textPrompt.replace(/^\.ai\s*/i, '').trim();
+      // 移除指令本身（.生图）
+      textPrompt = textPrompt.replace(/^\.生图\s*/i, '').trim();
     }
 
     // 如果既没有图片也没有文本，则显示帮助
@@ -159,7 +159,7 @@ if (!seal.ext.find('simple-ai-drawing')) {
     
     // 如果只有图片没有文本提示词，提示用户需要提供描述
     if (imageUrls.length > 0 && !textPrompt) {
-      seal.replyToSender(ctx, msg, '❌ 图生图需要同时提供文字描述\n\n正确示例：在同一条消息中发送\n[图片] .ai 将这张图改成油画风格');
+      seal.replyToSender(ctx, msg, '❌ 图生图需要同时提供文字描述\n\n正确示例：在同一条消息中发送\n[图片] .生图 将这张图改成油画风格');
       return seal.ext.newCmdExecuteResult(true);
     }
     
@@ -334,8 +334,27 @@ if (!seal.ext.find('simple-ai-drawing')) {
     return seal.ext.newCmdExecuteResult(true);
   };
 
+  // 创建预设列表指令
+  const cmdPresetList = seal.ext.newCmdItemInfo();
+  cmdPresetList.name = '生图预设';
+  cmdPresetList.help = '查看所有可用的预制提示词关键词。';
+  cmdPresetList.solve = (ctx, msg, cmdArgs) => {
+    const presetPromptsConfig = seal.ext.getTemplateConfig(ext, 'presetPrompts');
+    const presets = parsePresetPrompts(presetPromptsConfig);
+    const keywords = Array.from(presets.keys());
+
+    if (keywords.length > 0) {
+      const reply = `当前可用的预制提示词关键词：\n- ${keywords.join('\n- ')}`;
+      seal.replyToSender(ctx, msg, reply);
+    } else {
+      seal.replyToSender(ctx, msg, '当前没有配置任何预制提示词。');
+    }
+    return seal.ext.newCmdExecuteResult(true);
+  };
+
   // 注册指令
-  ext.cmdMap['ai'] = cmdAi;
+  ext.cmdMap['生图'] = cmdDraw;
+  ext.cmdMap['生图预设'] = cmdPresetList;
   // 注册扩展
   seal.ext.register(ext);
 
@@ -347,5 +366,4 @@ if (!seal.ext.find('simple-ai-drawing')) {
   seal.ext.registerTemplateConfig(ext, 'presetPrompts', [
     '手办化:Your task is to create a photorealistic, masterpiece-quality image of a 1/7 scale commercialized figurine based on the user\'s character. The final image must be in a realistic style and environment.**Crucial Instruction on Face & Likeness:** The figurine\'s face is the most critical element. It must be a perfect, high-fidelity 3D translation of the character from the source image. The sculpt must be sharp, clean, and intricately detailed, accurately capturing the original artwork\'s facial structure, eye style, expression, and hair. The final result must be immediately recognizable as the same character, elevated to a premium physical product standard. Do NOT generate a generic or abstract face.**Scene Composition (Strictly follow these details):**1. **Figurine & Base:** Place the figure on a computer desk. It must stand on a simple, circular, transparent acrylic base WITHOUT any text or markings.2. **Computer Monitor:** In the background, a computer monitor must display 3D modeling software (like ZBrush or Blender) with the digital sculpt of the very same figurine visible on the screen.3. **Artwork Display:** Next to the computer screen, include a transparent acrylic board with a wooden base. This board holds a print of the original 2D artwork that the figurine is based on.4. **Environment:** The overall setting is a desk, with elements like a keyboard to enhance realism. The lighting should be natural and well-lit, as if in a room.'
   ], '预制提示词，格式为 "关键词:提示词"，每行一个');
-
 }
