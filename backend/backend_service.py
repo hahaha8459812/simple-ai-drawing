@@ -93,6 +93,9 @@ def call_gemini_api(api_endpoint, api_key, model, prompt, image_base64):
                 if 'inlineData' in part and 'data' in part['inlineData']:
                     return part['inlineData']['data'], None
         
+        # 如果没有找到图片，记录完整的API响应
+        logger.warning("API响应中未找到图片数据，记录完整响应：")
+        logger.warning(data)
         return None, "API响应中未找到生成的图片"
     except Exception as e:
         logger.error(f"调用Gemini API失败: {str(e)}")
