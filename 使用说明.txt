@@ -4,7 +4,7 @@
 
 【一句话教程】
 
-将整个 `simple-ai-drawing` 文件夹放到海豹的 `scripts` 目录，配置好插件，然后双击 `启动图生图服务(Windows).bat` 即可开始使用。
+将整个 `simple-ai-drawing` 文件夹放到海豹的 `scripts` 目录，配置好插件，然后进入 `backend` 目录运行启动脚本即可。
 
 【详细步骤】
 
@@ -16,7 +16,8 @@
    - backendUrl: http://localhost:5000/process-image （图生图必需）
 
 3. 启动后端（仅图生图需要）
-   双击 `simple-ai-drawing` 文件夹内的 "启动图生图服务(Windows).bat"。
+   - Windows: 双击 `simple-ai-drawing/backend/start.bat`
+   - Linux/macOS: `cd simple-ai-drawing/backend && bash start.sh`
 
 4. 使用
    - 文生图: .生图 画一只猫
