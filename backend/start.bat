@@ -68,8 +68,8 @@ echo ========================================
 echo   启动服务中...
 echo ========================================
 echo.
-echo 服务地址: http://localhost:5000
-echo 健康检查: http://localhost:5000/health
+echo 服务地址: http://localhost:35814
+echo 健康检查: http://localhost:35814/health
 echo.
 echo 提示：按 Ctrl+C 可以停止服务
 echo ========================================

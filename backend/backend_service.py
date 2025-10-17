@@ -169,9 +169,10 @@ def health():
 
 
 if __name__ == '__main__':
+    port = 35814
     logger.info("启动 Simple AI Drawing Backend Service...")
-    logger.info("服务地址: http://localhost:5000")
-    logger.info("健康检查: http://localhost:5000/health")
-    logger.info("API接口: http://localhost:5000/process-image")
+    logger.info(f"服务地址: http://localhost:{port}")
+    logger.info(f"健康检查: http://localhost:{port}/health")
+    logger.info(f"API接口: http://localhost:{port}/process-image")
     
-    app.run(host='0.0.0.0', port=5000, debug=False)
+    app.run(host='0.0.0.0', port=port, debug=False)

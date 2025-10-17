@@ -13,7 +13,7 @@
 
 2. 配置插件（在海豹Web界面）
    - apiKey: 你的Gemini API Key
-   - backendUrl: http://localhost:5000/process-image （图生图必需）
+   - backendUrl: http://localhost:35814/process-image （图生图必需）
 
 3. 启动后端（仅图生图需要）
    - Windows: 双击 `simple-ai-drawing/backend/start.bat`

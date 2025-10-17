@@ -42,7 +42,7 @@
 | `apiEndpoint` | Gemini API 根地址 | `https://generativelanguage.googleapis.com` |
 | `apiKey` | Gemini API Key | `AIza...` |
 | `model` | Gemini 模型名称 | `gemini-2.5-flash-image-preview` |
-| `backendUrl` | 后端服务地址（图生图） | `http://localhost:5000/process-image` |
+| `backendUrl` | 后端服务地址（图生图） | `http://localhost:35814/process-image` |
 | `presetPrompts` | 预制提示词 | (见下方说明) |
 
 **注意：**
@@ -52,69 +52,61 @@
 
 ### 步骤 4: 启动后端服务 (仅图生图需要)
 
-**Windows用户 - 超简单！**
-1. 确保已安装Python (安装时勾选 "Add Python to PATH")。
-2. 进入 `simple-ai-drawing` 文件夹，双击 `启动图生图服务(Windows).bat` 即可！
-   - 脚本会自动检查和安装依赖，并启动后端服务。
+进入 `simple-ai-drawing/backend` 文件夹。
 
-**其他系统用户 (手动启动):**
-```bash
-# 进入backend目录
-cd <海豹脚本目录>/simple-ai-drawing/backend
+#### 方式 A: 一键启动脚本 (推荐)
 
-# 安装依赖
-pip install flask flask-cors requests pillow
+-   **Windows 用户**: 直接双击 `start.bat` 即可。
+-   **Linux / macOS 用户**: 在终端中执行 `bash start.sh`。 (首次运行可能需要 `chmod +x start.sh`)
 
-# 启动服务
-python backend_service.py
-```
-服务将运行在 `http://localhost:5000`。
+> 脚本会自动创建虚拟环境、安装依赖并启动服务。
 
-#### 方式B：Docker 部署
+#### 方式 B: 手动启动
 
-创建 `Dockerfile`：
-```dockerfile
-FROM python:3.9-slim
+如果您不想使用一键脚本，可以手动执行以下步骤：
 
-WORKDIR /app
-COPY backend_service.py .
-COPY requirements.txt .
+1.  **创建并激活虚拟环境**:
+    ```bash
+    # 创建虚拟环境 (只需一次)
+    python -m venv venv
+    
+    # 激活虚拟环境
+    # Windows
+    .\venv\Scripts\activate
+    # Linux / macOS
+    source venv/bin/activate
+    ```
 
-RUN pip install --no-cache-dir -r requirements.txt
+2.  **安装依赖**:
+    ```bash
+    pip install -r requirements.txt
+    ```
 
-EXPOSE 5000
+3.  **启动服务**:
+    ```bash
+    python backend_service.py
+    ```
 
-CMD ["python", "backend_service.py"]
-```
+> 服务将运行在 `http://localhost:35814`。
 
-创建 `requirements.txt`：
-```
-flask==2.3.0
-flask-cors==4.0.0
-requests==2.31.0
-pillow==10.0.0
-```
+#### 方式 C: Docker Compose 部署 (可选)
 
-构建并运行：
-```bash
-docker build -t ai-drawing-backend .
-docker run -d -p 5000:5000 ai-drawing-backend
-```
+如果您熟悉 Docker，我们推荐使用 Docker Compose 来管理服务。
 
-### 3. 配置插件
+1.  **安装 Docker 和 Docker Compose**。
+2.  进入 `simple-ai-drawing/backend` 目录。
+3.  执行以下命令即可一键启动：
+    ```bash
+    docker-compose up -d
+    ```
+    这会自动构建镜像并在后台启动服务。
 
-在海豹骰的Web界面中，找到 **扩展管理 → Simple AI Drawing**，配置以下项：
-
-| 配置项 | 说明 | 示例值 |
-|--------|------|--------|
-| `apiEndpoint` | Gemini API 根地址 | `https://generativelanguage.googleapis.com` |
-| `apiKey` | Gemini API Key | `AIza...` |
-| `model` | Gemini 模型名称 | `gemini-2.0-flash-exp` |
-| `backendUrl` | 后端服务地址（图生图） | `http://localhost:5000/process-image` |
-
-**注意：**
-- 如果只需要文生图功能，可以不配置 `backendUrl`
-- `backendUrl` 留空会禁用图生图功能
+**常用 Docker Compose 命令:**
+-   `docker-compose up -d`: 在后台启动服务
+-   `docker-compose down`: 停止并移除服务
+-   `docker-compose logs -f`: 查看实时日志
+-   `docker-compose pull`: 更新镜像 (如果基础镜像有更新)
+-   `docker-compose build`: 重新构建镜像
 
 ## 🎯 使用方法
 
@@ -176,12 +168,12 @@ docker run -d -p 5000:5000 ai-drawing-backend
 
 1. **检查后端服务是否运行：**
    ```bash
-   curl http://localhost:5000/health
+   curl http://localhost:35814/health
    ```
    应返回：`{"status":"ok","service":"Simple AI Drawing Backend"}`
 
 2. **检查后端服务地址配置：**
-   - 确保配置的是完整URL：`http://localhost:5000/process-image`
+   - 确保配置的是完整URL：`http://localhost:35814/process-image`
    - 如果海豹和后端不在同一台机器，使用实际IP地址
 
 3. **查看日志：**

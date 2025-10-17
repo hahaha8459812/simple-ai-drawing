@@ -64,8 +64,8 @@ echo -e "${GREEN}========================================${NC}"
 echo -e "${GREEN}  启动服务中...${NC}"
 echo -e "${GREEN}========================================${NC}"
 echo
-echo -e "服务地址: ${YELLOW}http://localhost:5000${NC}"
-echo -e "健康检查: ${YELLOW}http://localhost:5000/health${NC}"
+echo -e "服务地址: ${YELLOW}http://localhost:35814${NC}"
+echo -e "健康检查: ${YELLOW}http://localhost:35814/health${NC}"
 echo
 echo -e "提示：按 ${YELLOW}Ctrl+C${NC} 可以停止服务"
 echo -e "${GREEN}========================================${NC}"

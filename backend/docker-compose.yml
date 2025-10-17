@@ -1,0 +1,11 @@
+version: '3.8'
+
+services:
+  ai_drawing_backend:
+    build: .
+    container_name: ai_drawing_backend
+    ports:
+      - "35814:35814"
+    restart: unless-stopped
+    volumes:
+      - .:/app
